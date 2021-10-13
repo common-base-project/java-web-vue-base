@@ -6,6 +6,10 @@
 - 数据切换，通过mock配置对接口数据／mock模拟数据进行切换
 - 发布时，可动态配置CDN静态资源／切换新旧版本
 
+```shell
+# 安装淘宝 NPM 镜像  https://npmmirror.com/
+npm install -g cnpm --registry=https://registry.npmmirror.com
+
 
 cnpm install
 
@@ -15,21 +19,31 @@ cnpm run dev
 
 cnpm run build
 
+```
+
+
+
+
 ## make 打包
-    注意：Makefile 文件里 main.go 的路径
+```shell
+# 注意：Makefile 文件里 main.go 的路径
+## 测试和正式服打包上线
+make docker-all VERSION="staging_v0.0.1" ENV_SERVER_MODE="staging"
+make docker-all VERSION="staging_v0.0.1" ENV_SERVER_MODE="dev"
+make docker-all VERSION="prod_v0.0.1" ENV_SERVER_MODE="prod"
 
-    make docker-all VERSION="staging_v0.0.1" ENV_SERVER_MODE="staging"
-    make docker-all VERSION="staging_v0.0.1" ENV_SERVER_MODE="dev"
-    make docker-all VERSION="prod_v0.0.1" ENV_SERVER_MODE="prod"
+## 本地编译
+make build-all VERSION="staging_v0.0.1" ENV_SERVER_MODE="staging"
+make build-all VERSION="prod_v0.0.1" ENV_SERVER_MODE="prod"
 
-    ## 本地编译
-    make build-all VERSION="staging_v0.0.1" ENV_SERVER_MODE="staging"
-    make build-all VERSION="prod_v0.0.1" ENV_SERVER_MODE="prod"
+## docker 直接打包
+docker buildx build --platform linux/amd64 --no-cache -t java-web-vue-base .
 
-    docker buildx build --platform linux/amd64 --no-cache -t java-web-vue-base .
+docker build --no-cache -f ./Dockerfile.dev -t java-web-vue-base .
+docker build --no-cache -f ./Dockerfile.pro -t java-web-vue-base .
 
-    docker build --no-cache -f ./Dockerfile.dev -t java-web-vue-base .
-    docker build --no-cache -f ./Dockerfile.pro -t java-web-vue-base .
+## 直接运行容器
+docker run --rm --name my-web-base -p 8088:8001 java-web-vue-base:latest
 
-    docker run --rm --name my-web-base -p 8088:8001 java-web-vue-base:latest
+```
 

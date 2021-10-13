@@ -23,28 +23,28 @@ DOCKER_TARGET=$(DOCKER_REGISTRY)/$(NAME):$(RELEASE_VERSION)
 all: build-dev
 
 build-release:
-	# @npm install -g cnpm --registry=https://registry.npmmirror.com
 	@cnpm install
 	@cnpm run build
-	@echo "$(NAME) build okay"
+	@echo "==================$(NAME) build okay=================="
 
 clean:
 	@rm -rf ./dist
-	@echo "clean okay"
+	@echo "==================clean okay=================="
 
 docker-build: clean
 	@docker buildx build --platform linux/amd64 --no-cache -t $(DOCKER_TARGET) --build-arg modeenv=$(ENV_SERVER_MODE) --build-arg procname=$(NAME) .
-	@echo "docker-build okay"
+	@echo "==================docker-build okay=================="
 
 docker-build-new: clean build-release
 	@docker buildx build --platform linux/amd64 --no-cache -f ./Dockerfile.pro -t $(DOCKER_TARGET) --build-arg modeenv=$(ENV_SERVER_MODE) --build-arg procname=$(NAME) .
-	@echo "docker-build1 okay"
+	@echo "==================docker-build1 okay=================="
 
 docker-push:
 	docker push $(DOCKER_TARGET)
+	@echo "==================docker-push okay=================="
 
 docker-all: docker-build docker-push
-	@echo "docker-all okay"
+	@echo "==================docker-all okay=================="
 
 build-all: docker-build-new docker-push
-	@echo "build-all okay"
+	@echo "==================build-all okay=================="
